@@ -6,9 +6,9 @@ PsyBot is a harm reduction and drug education orientated discord bot which provi
 
 ## Features
 
-* drug informations
-* weed strain informations
-* pill informations
+* drug information
+* weed strain information
+* pill information
 * information about combination of different drugs
 * tolerance calculation for LSD based on scientific papers
 
