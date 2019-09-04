@@ -6,11 +6,13 @@ PsyBot is a harm reduction and drug education orientated discord bot which provi
 
 ## Features
 
-* drug informations (-drug <drugname>)
-* weed strain informations (-strain <strainname>)
-* pill informations (-pill <imprint>)
-* information about combination of different drugs (-combo <drugA> <drugB>)
-* tolerance calculation for LSD based on scientific papers (<calc <firstDosage> <daysInBetween> <desiredDosage>)
+* drug informations
+* weed strain informations
+* pill informations
+* information about combination of different drugs
+* tolerance calculation for LSD based on scientific papers
+
+Use ``-help`` to get an overview of commands.
 
 ## Requirements
 
