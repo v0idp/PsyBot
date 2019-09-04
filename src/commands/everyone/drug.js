@@ -176,37 +176,8 @@ module.exports = class drugCommand extends commando.Command {
       tripSit = result;
       return getPsychonautDrug(tripSit.pretty_name);
     }).then(function(result) {
-      let validDrugClass = false;
-      if (result.class && result.class.psychoactive) {
-        for (let i = 0;i < result.class.psychoactive.length;i++) {
-          if (validClasses[result.class.psychoactive[i]]) {
-            validDrugClass = true;
-            break;
-          }
-        }
-      }
-      else if (result.class && result.class.chemical) {
-        for (let i = 0;i < result.class.chemical.length;i++) {
-          if (validChemicalClasses[result.class.chemical[i]]) {
-            validDrugClass = true;
-            break;
-          }
-        }
-      }
-
-      if (validDrugClass) {
-        deleteCommandMessages(msg);
-        return msg.embed(createDrugEmbed(tripSit, result));
-      }
-      else {
-        msg.author.send('We are a psychedelic oriented server. The drug you requested is not a psychedelic,'
-                + ' dissociative or entactogen and so we would appreciate if you limit your discussion of this substance. '
-                + 'In the interest of harm reduction here is some information:');
-        msg.author.send(createDrugEmbed(tripSit, result));
-
-        deleteCommandMessages(msg);
-        return msg.reply('please check your DMs for information about this drug.');
-      }
+      deleteCommandMessages(msg);
+      return msg.embed(createDrugEmbed(tripSit, result));
     }).catch((error) => {
       console.log(error);
       return msg.reply(error);
