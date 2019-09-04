@@ -1,0 +1,8 @@
+.DS_Store
+node_modules
+/src/settings.sqlite3
+package-lock.json
+docker-compose.yml
+yarn.lock
+src/cache
+dev-config.json

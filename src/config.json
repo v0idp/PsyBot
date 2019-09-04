@@ -1,0 +1,11 @@
+{
+    "general" : {
+        "token" : "",
+        "ownerID" : [""],
+        "globalCommandPrefix" : "",
+        "deleteCommandMessages" : false
+    },
+    "api" : {
+        "strain": ""
+    }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "psybot",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "keywords": [
+    "discord",
+    "bot",
+    "commands",
+    "psychedelics",
+    "drugs",
+    "lysergia"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/v0idp/PsyBot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/v0idp/PsyBot/issues"
+  },
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node src/index.js"
+  },
+  "author": "void*",
+  "license": "GPLv3",
+  "dependencies": {
+    "bluebird": "^3.5.5",
+    "discord.js": "github:discordjs/discord.js",
+    "discord.js-commando": "github:discordjs/Commando",
+    "jsdom": "^15.1.1",
+    "moment": "^2.24.0",
+    "request": "^2.88.0",
+    "sqlite": "^2.9.3"
+  }
+}
