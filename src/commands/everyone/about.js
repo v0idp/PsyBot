@@ -26,6 +26,21 @@ module.exports = class aboutCommand extends commando.Command {
           name: 'About Me',
           value: 'This bot was created by void*#2244 for harm reduction and drug education uses. ' +
             'If you have any suggestions or just want to message me, feel free to do so.'
+        },
+        {
+          name: 'Discord',
+          value: 'If you need support with the bot or just want to chat with me, join my discord server: ' + 
+            'https://discord.gg/pvXZwfh'
+        },
+        {
+          name: 'Website',
+          value: 'Check out my website! ' + 
+            'https://psybot.darana.me'
+        },
+        {
+          name: 'GitHub',
+          value: 'If you want to check out the source code, go here: ' + 
+            'https://github.com/v0idp/PsyBot'
         }
       ],
       timestamp: new Date(),
