@@ -38,7 +38,7 @@ Your bot will need following permissions:
 Enter your bot client id into the field down below in the Permission Calculator. You can get it from your bot application site where you created your bot.
 Next click on the link at the bottom and invite the bot to your server.
 
-Go into the Mellow root folder and type
+Go into the PsyBot root folder and type
 ```sh
 npm prestart
 ```
