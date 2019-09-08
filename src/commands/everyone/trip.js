@@ -43,7 +43,7 @@ module.exports = class tripCommand extends commando.Command {
       return msg.say(`I'm missing permissions to use this command. (manage nicknames, manage roles)`);
     }
 
-    let tripRole = msg.guild.roles.find(role => role.name === 'tripping');
+    let tripRole = msg.guild.roles.find(role => role.name.toLowerCase() === 'tripping');
     if (!tripRole) {
       deleteCommandMessages(msg);
       return msg.say(`Couldn't find a role called "tripping"`);

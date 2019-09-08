@@ -21,7 +21,7 @@ module.exports = class bakedCommand extends commando.Command {
       return msg.say(`I'm missing permissions to use this command. (manage roles)`);
     }
 
-    let bakedRole = msg.guild.roles.find(role => role.name === 'baked');
+    let bakedRole = msg.guild.roles.find(role => role.name.toLowerCase() === 'baked');
     if (!bakedRole) {
       deleteCommandMessages(msg);
       return msg.say(`Couldn't find a role called "baked"`);
