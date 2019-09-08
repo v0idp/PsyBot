@@ -13,6 +13,7 @@ PsyBot is a harm reduction and drug education orientated discord bot which provi
 * tolerance calculation for LSD based on scientific papers
 
 Use ``-help`` to get an overview of commands.
+You can set your own prefix for the bot by using the ``-prefix`` command.
 
 ## Requirements
 
