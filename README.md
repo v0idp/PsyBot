@@ -22,7 +22,7 @@ You can set your own prefix for the bot by using the ``-prefix`` command.
 ## Invite Public Bot
 
 If you don't want to set up the bot yourself, you can invite the official bot with this link:
-[Invite Link](https://discordapp.com/oauth2/authorize?client_id=618777826878947338&scope=bot&permissions=93248)
+[Invite Link](https://discordapp.com/oauth2/authorize?client_id=618777826878947338&scope=bot&permissions=402746432)
 
 ## Installation & Configuration
 
@@ -35,6 +35,8 @@ Your bot will need following permissions:
 * Embed Links
 * Read Message History
 * Add Reactions
+* Manage Roles
+* Manage Nicknames
 
 Enter your bot client id into the field down below in the Permission Calculator. You can get it from your bot application site where you created your bot.
 Next click on the link at the bottom and invite the bot to your server.
