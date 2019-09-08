@@ -41,7 +41,8 @@ class Bot extends Commando.Client {
         'prefix': true,
         'ping': true,
         'eval_': false,
-        'commandState': true
+        'commandState': true,
+        'unknownCommand': false
       })
       .registerCommandsIn(path.join(__dirname, 'commands'));
 
