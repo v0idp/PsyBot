@@ -11,9 +11,11 @@ PsyBot is a harm reduction and drug education orientated discord bot which provi
 * pill information
 * information about combination of different drugs
 * tolerance calculation for LSD based on scientific papers
+* Role Assignment (``tripping`` and ``baked``)
 
 Use ``-help`` to get an overview of commands.
 You can set your own prefix for the bot by using the ``-prefix`` command.
+If for whatever reason you want to disable or enable a command use these commands: ``-enable`` and ``-disable``
 
 ## Requirements
 
