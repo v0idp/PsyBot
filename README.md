@@ -1,7 +1,7 @@
 # PsyBot
 
 [![Discord](https://img.shields.io/badge/Discord-Invite-7289DA.svg?style=flat-square)](https://discord.gg/pvXZwfh) 
-[![Docker](https://img.shields.io/badge/Docker-Hub-lightblue.svg?style=flat-square)](https://cloud.docker.com/u/voidp/repository/docker/voidp/mellow)
+[![Docker](https://img.shields.io/badge/Docker-Hub-lightblue.svg?style=flat-square)](https://cloud.docker.com/u/voidp/repository/docker/voidp/psybot)
 
 PsyBot is a harm reduction and drug education orientated discord bot which provides you several commands to get information on different substances.
 
