@@ -104,7 +104,7 @@ const getPsychonautDrug = function(drugName) {
         resolve(body.data.substances[0]);
       }
       else {
-        reject('Something went wrong with Psychonaut Wiki API');
+        resolve('No hit on Psychonaut Wiki API');
       }
     });
   });
@@ -135,8 +135,9 @@ const getTripSitDrug = function(drugName) {
         reject('Problem communicating with the TripSit API');
       }
       else if (response.statusCode !== 200 || body.err) {
-        console.log(response.statusCode + body);
-        reject('Couldn\'t find any results. Is the drug name correct?');
+        console.log(response.statusCode);
+        console.log(body);
+        resolve('Couldn\'t find any results. Is the drug name correct?');
       }
       else if (body.data && body.data.length > 0){
         if (!dictionary.hasOwnProperty(drugName.toLowerCase())) {

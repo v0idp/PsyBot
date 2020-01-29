@@ -10,6 +10,7 @@ const validClasses = {
   'Dissociatives#': true,
   'Dissociative': true,
   'Entactogen': true,
+  'Empathogen': true,
   'Entactogen#': true,
   'Entactogens': true,
   'Entactogens#': true,
@@ -45,6 +46,22 @@ let formatTolerance = function(tolerance, crossTolerances) {
 };
 
 let createDrugEmbed = function(tripSit, psychonaut) {
+  //console.log(tripSit);
+  //console.log(psychonaut);
+  let tripSitInd = true;
+  let psychonautInd = true;
+  if (tripSit === 'Couldn\'t find any results. Is the drug name correct?') {
+    tripSitInd = false;
+  }
+  if (psychonaut === 'No hit on Psychonaut Wiki API') {
+    psychonautInd = false;
+  }
+  if (tripSitInd === false && psychonautInd === false) {
+    return new Discord.RichEmbed()
+      .setColor(13632027)
+      .setAuthor(tripSit)
+      .setTimestamp();
+  }
   let embedHeader = tripSit.pretty_name;
   let aliases = tripSit.properties.aliases;
   if (aliases && aliases.length > 0) {
@@ -56,12 +73,18 @@ let createDrugEmbed = function(tripSit, psychonaut) {
       embedHeader = embedHeader + ' (also known as ' + aliases[0] + ')';
     }
   }
-  let embed = new Discord.MessageEmbed()
-    .setAuthor(embedHeader, 'https://i.imgur.com/fD0cG2j.png', psychonaut.url)
+
+  let embed = new Discord.RichEmbed()
     .setColor(3447003)
     .setFooter('For further information click on the name of the drug.')
     .setTimestamp();
 
+  if (psychonautInd === true) {
+    embed.setAuthor(embedHeader, 'https://i.imgur.com/fD0cG2j.png', psychonaut.url);
+  }
+  else if (psychonautInd === false) {
+    embed.setAuthor(embedHeader, 'https://i.imgur.com/fD0cG2j.png', 'http://drugs.tripsit.me/' + tripSit.name);
+  }
   if (tripSit.properties.summary) {
     embed.addField('__Summary__', tripSit.properties.summary);
   }
@@ -70,6 +93,16 @@ let createDrugEmbed = function(tripSit, psychonaut) {
   }
   if (psychonaut.tolerance) {
     embed.addField('__Tolerance__', formatTolerance(psychonaut.tolerance, psychonaut.crossTolerances), false);
+  }
+  if (psychonaut.dangerousInteractions && psychonautInd === true) {
+    let drugs = '';
+    for (var drug of psychonaut.dangerousInteractions) {
+      drugs += drug.name + '. ';
+    }
+    embed.addField('__Dangerous Interactions__', drugs);
+  }
+  else if (tripSit.properties.avoid) {
+    embed.addField('__Dangerous Interactions__', tripSit.properties.avoid);
   }
   //
   // DOSAGE FORMATTING
@@ -143,8 +176,24 @@ let createDrugEmbed = function(tripSit, psychonaut) {
     }
     embed.addField('__Dose__', dose, true);
   }
+  else if (tripSit.properties.duration && tripSit.properties.onset) {
+    embed.addField('__Duration__', 'Onset: ' + tripSit.properties.onset + '\nTotal: ' + tripSit.properties.duration, true);
+  }
   if (psychonaut.addictionPotential) {
     embed.addField('\u200B', '**Addiction Potential - ' + capitalizeFirstLetter(psychonaut.addictionPotential) + '**');
+  }
+  if (tripSit.links) {
+    let embedlinks = '';
+    if (tripSit.links.experiences) {
+      embedlinks += `[Erowid Experiences](${tripSit.links.experiences})`;
+    }
+    if (tripSit.links.pihkal) {
+      embedlinks += `, [PiHKAL Page](${tripSit.links.pihkal})`;
+    }
+    if (tripSit.links.tihkal) {
+      embedlinks += `, [TiHKAL Page](${tripSit.links.tihkal})`;
+    }
+    embed.addField('\u200B', '**Additional Links - ' + embedlinks + '**');
   }
   return embed;
 };
@@ -176,11 +225,12 @@ module.exports = class drugCommand extends commando.Command {
       tripSit = result;
       return getPsychonautDrug(tripSit.pretty_name);
     }).then(function(result) {
-      deleteCommandMessages(msg);
-      return msg.embed(createDrugEmbed(tripSit, result));
-    }).catch((error) => {
-      console.log(error);
-      return msg.reply(error);
+      getTripSitDrug(args.drugName).then(function(tripresult) {
+        if (tripresult === 'Couldn\'t find any results. Is the drug name correct?') { //this is the error handling logic, the actual error handling is done in the util.js API call
+          deleteCommandMessages(msg);
+          return msg.embed(createDrugEmbed(tripSit, result));
+        }
+      });
     });
   }
 };
