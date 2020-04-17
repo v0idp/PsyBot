@@ -62,7 +62,7 @@ module.exports = class tripCommand extends commando.Command {
       args.drugName = 'LSD';
     }
 
-    if (!member.roles.has(tripRole.id)) {
+    if (!member.roles.cache.has(tripRole.id)) {
       let prettyName;
       getTripSitDrug(args.drugName).then(function(result){
         prettyName = result.pretty_name;
