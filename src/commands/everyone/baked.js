@@ -34,7 +34,7 @@ module.exports = class bakedCommand extends commando.Command {
       return msg.say(`I can't change the role of the owner.`);
     }
 
-    if (!member.roles.has(bakedRole.id)) {
+    if (!member.roles.cache.has(bakedRole.id)) {
       member.roles.add(bakedRole.id).catch(console.log);
       deleteCommandMessages(msg);
       return msg.say('sangreen');
