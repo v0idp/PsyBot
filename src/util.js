@@ -61,14 +61,6 @@ const post = function(options) {
 
 const getPsychonautDrug = function(drugName) {
   return new Promise(function(resolve, reject) {
-    let cachedDrugPath = path.join(__dirname, `cache/psychonaut/${drugName}.json`);
-    if (fs.existsSync(cachedDrugPath)) {
-      let cachedDrug = require(cachedDrugPath);
-      if (dateDifference(cachedDrug.cacheAge, new Date().toLocaleString(), 'hours') < 24) {
-        resolve(cachedDrug);
-      }
-    }
-
     request({
       url: PSYCHONAUT_URL,
       timeout: 10000,
@@ -100,7 +92,6 @@ const getPsychonautDrug = function(drugName) {
         reject(JSON.stringify(body));
       }
       else if (body.data && body.data.substances && body.data.substances.length > 0){
-        fs.writeFileSync(cachedDrugPath, JSON.stringify(Object.assign(body.data.substances[0], {'cacheAge': new Date().toLocaleString()})), {encoding:'utf8',flag:'w'});
         resolve(body.data.substances[0]);
       }
       else {
@@ -112,19 +103,6 @@ const getPsychonautDrug = function(drugName) {
 
 const getTripSitDrug = function(drugName) {
   return new Promise(function(resolve, reject) {
-    let dictionaryPath = path.join(__dirname, 'cache/dictionary.json');
-    let dictionary = require(dictionaryPath);
-    if (dictionary.hasOwnProperty(drugName.toLowerCase())) {
-      let prettyName = dictionary[drugName.toLowerCase()];
-      let cachedDrugPath = path.join(__dirname, `cache/tripsit/${prettyName}.json`);
-      if (fs.existsSync(cachedDrugPath)) {
-        let cachedDrug = require(cachedDrugPath);
-        if (dateDifference(cachedDrug.cacheAge, new Date().toLocaleString(), 'hours') < 24) {
-          resolve(cachedDrug);
-        }
-      }
-    }
-
     request({
       url: TRIPSIT_URL + drugName,
       timeout: 10000,
@@ -135,14 +113,9 @@ const getTripSitDrug = function(drugName) {
         reject('Problem communicating with the TripSit API');
       }
       else if (response.statusCode !== 200 || body.err) {
-        console.log(response.statusCode + body);
-        reject('Couldn\'t find any results. Is the drug name correct?');
+        resolve('Couldn\'t find any results. Is the drug name correct?');
       }
       else if (body.data && body.data.length > 0){
-        if (!dictionary.hasOwnProperty(drugName.toLowerCase())) {
-          fs.writeFileSync(dictionaryPath, JSON.stringify(Object.assign(dictionary, {[drugName.toLowerCase()]: body.data[0].pretty_name})), {encoding:'utf8',flag:'w'});
-        }
-        fs.writeFileSync(path.join(__dirname, `cache/tripsit/${body.data[0].pretty_name}.json`), JSON.stringify(Object.assign(body.data[0], {'cacheAge': new Date().toLocaleString()})), {encoding:'utf8',flag:'w'});
         resolve(body.data[0]);
       }
       else {
@@ -159,7 +132,10 @@ const searchStrains = function(strainName) {
       timeout: 10000,
       json: true
     }, function (error, response, body) {
-      if (response.statusCode === 200 && body.length > 0){
+      if (!response) {
+        reject('Strain API is currently down. Please try again later.');
+      }
+      else if (response && response.statusCode === 200 && body.length > 0){
         resolve(body);
       }
       else {
