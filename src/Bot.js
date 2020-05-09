@@ -24,9 +24,14 @@ class Bot extends Commando.Client {
 			});
 		});
 
+    // create data folder if it doesn't exist
+    if (!fs.existsSync(path.join(__dirname, 'data'))){
+      fs.mkdirSync(path.join(__dirname, 'data'));
+    }
+
     // set provider sqlite3 so we can save our settings
     this.setProvider(
-      sqlite.open(path.join(__dirname, 'settings.sqlite3')).then(db => new Commando.SQLiteProvider(db))
+      sqlite.open(path.join(__dirname, 'data/settings.sqlite3')).then(db => new Commando.SQLiteProvider(db))
     ).catch(console.error);
 
     // register default groups and commands
