@@ -46,7 +46,7 @@ let createDrugEmbed = function(tripSit, psychonaut) {
     }
   }
 
-  let embed = new Discord.RichEmbed()
+  let embed = new Discord.MessageEmbed()
     .setColor(3447003)
     .setFooter('For further information click on the name of the drug.')
     .setTimestamp();
