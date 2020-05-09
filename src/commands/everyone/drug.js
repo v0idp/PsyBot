@@ -20,8 +20,6 @@ let formatTolerance = function(tolerance, crossTolerances) {
 };
 
 let createDrugEmbed = function(tripSit, psychonaut) {
-  //console.log(tripSit);
-  //console.log(psychonaut);
   let tripSitInd = true;
   let psychonautInd = true;
   if (tripSit === 'Couldn\'t find any results. Is the drug name correct?') {
@@ -31,7 +29,7 @@ let createDrugEmbed = function(tripSit, psychonaut) {
     psychonautInd = false;
   }
   if (tripSitInd === false && psychonautInd === false) {
-    return new Discord.RichEmbed()
+    return new Discord.MessageEmbed()
       .setColor(13632027)
       .setAuthor(tripSit)
       .setTimestamp();
