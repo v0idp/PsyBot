@@ -2,31 +2,6 @@ const Discord = require('discord.js');
 const commando = require('discord.js-commando');
 const {deleteCommandMessages, getPsychonautDrug, getTripSitDrug, capitalizeFirstLetter} = require('../../util.js');
 
-const validClasses = {
-  'Psychedelics': true,
-  'Psychedelic': true,
-  'Psychedelics#': true,
-  'Dissociatives': true,
-  'Dissociatives#': true,
-  'Dissociative': true,
-  'Entactogen': true,
-  'Entactogen#': true,
-  'Entactogens': true,
-  'Entactogens#': true,
-  'Hallucinogen': true,
-  'Hallucinogen#': true,
-  'Tryptamine#': true
-};
-
-const validChemicalClasses = {
-  'Tryptamine': true,
-  'Tryptamine#': true,
-  'Phenethylamine': true,
-  'Phenethylamine#': true,
-  'Lysergamide': true,
-  'Lysergamide#': true
-};
-
 let formatTolerance = function(tolerance, crossTolerances) {
   let toleranceString = '';
   if (tolerance.full) {
@@ -45,6 +20,22 @@ let formatTolerance = function(tolerance, crossTolerances) {
 };
 
 let createDrugEmbed = function(tripSit, psychonaut) {
+  //console.log(tripSit);
+  //console.log(psychonaut);
+  let tripSitInd = true;
+  let psychonautInd = true;
+  if (tripSit === 'Couldn\'t find any results. Is the drug name correct?') {
+    tripSitInd = false;
+  }
+  if (psychonaut === 'No hit on Psychonaut Wiki API') {
+    psychonautInd = false;
+  }
+  if (tripSitInd === false && psychonautInd === false) {
+    return new Discord.RichEmbed()
+      .setColor(13632027)
+      .setAuthor(tripSit)
+      .setTimestamp();
+  }
   let embedHeader = tripSit.pretty_name;
   let aliases = tripSit.properties.aliases;
   if (aliases && aliases.length > 0) {
@@ -56,12 +47,18 @@ let createDrugEmbed = function(tripSit, psychonaut) {
       embedHeader = embedHeader + ' (also known as ' + aliases[0] + ')';
     }
   }
-  let embed = new Discord.MessageEmbed()
-    .setAuthor(embedHeader, 'https://i.imgur.com/fD0cG2j.png', psychonaut.url)
+
+  let embed = new Discord.RichEmbed()
     .setColor(3447003)
     .setFooter('For further information click on the name of the drug.')
     .setTimestamp();
 
+  if (psychonautInd === true) {
+    embed.setAuthor(embedHeader, 'https://i.imgur.com/fD0cG2j.png', psychonaut.url);
+  }
+  else if (psychonautInd === false) {
+    embed.setAuthor(embedHeader, 'https://i.imgur.com/fD0cG2j.png', 'http://drugs.tripsit.me/' + tripSit.name);
+  }
   if (tripSit.properties.summary) {
     embed.addField('__Summary__', tripSit.properties.summary);
   }
@@ -71,12 +68,25 @@ let createDrugEmbed = function(tripSit, psychonaut) {
   if (psychonaut.tolerance) {
     embed.addField('__Tolerance__', formatTolerance(psychonaut.tolerance, psychonaut.crossTolerances), false);
   }
+  if (psychonaut.dangerousInteractions && psychonautInd === true) {
+    let drugs = '';
+    for (var drug of psychonaut.dangerousInteractions) {
+      drugs += drug.name + '. ';
+    }
+    embed.addField('__Dangerous Interactions__', drugs);
+  }
+  else if (tripSit.properties.avoid) {
+    embed.addField('__Dangerous Interactions__', tripSit.properties.avoid);
+  }
   //
   // DOSAGE FORMATTING
   //
   if (psychonaut.roas && (!tripSit.formatted_dose || (psychonaut.roas.length >= Object.keys(tripSit.formatted_dose).length))) {
     let dose = '';
     let duration = '';
+    if (tripSit.name === 'mushrooms') {
+      psychonaut.roas[0].dose.units = 'g';
+    }
     for (var roa of psychonaut.roas) {
       if (roa.dose && (Object.keys(roa.dose).length > 0)) {
         dose += '**' + capitalizeFirstLetter(roa.name) +  '**\n';
@@ -121,11 +131,13 @@ let createDrugEmbed = function(tripSit, psychonaut) {
       dose = 'No dose info';
     }
 
-    if (duration === '' ) {
+    if (duration === '') {
       duration = 'No duration info';
     }
     embed.addField('__Dose__', dose, true);
-    embed.addField('__Duration__', duration,true);
+    if (!tripSit.properties.onset && !tripSit.properties.duration && duration === 'No duration info') {
+      embed.addField('__Duration__', duration,true);
+    }
 
   }
   else if (tripSit.formatted_dose){
@@ -143,8 +155,46 @@ let createDrugEmbed = function(tripSit, psychonaut) {
     }
     embed.addField('__Dose__', dose, true);
   }
+  var durationpreviouslySet = false;
+  for (let index = 0; index < embed.fields.length; index++) {
+    const element = embed.fields[index];
+    if (element.name === '__Duration__') {
+      durationpreviouslySet = true;
+      if (element.value === 'No duration info') {
+        durationpreviouslySet = false;
+      }
+    }
+  }
+  if (tripSit.properties.duration && tripSit.properties.onset && durationpreviouslySet === false) {
+    var onsetjoined = tripSit.properties.onset;
+    var durationjoined = tripSit.properties.duration;
+
+    if (tripSit.properties.onset.includes('|')) {
+      var onset = tripSit.properties.onset.split('|');
+      onsetjoined = onset.join('\n');
+    }
+
+    if (tripSit.properties.duration.includes('|')) {
+      var duration = tripSit.properties.duration.split('|');
+      durationjoined = duration.join('\n');
+    }
+    embed.addField('__Duration__', '**Onset:** \n' + onsetjoined + '\n**Total:** \n' + durationjoined, true);
+  }
   if (psychonaut.addictionPotential) {
     embed.addField('\u200B', '**Addiction Potential - ' + capitalizeFirstLetter(psychonaut.addictionPotential) + '**');
+  }
+  if (tripSit.links) {
+    let embedlinks = '';
+    if (tripSit.links.experiences) {
+      embedlinks += `[Erowid Experiences](${tripSit.links.experiences})`;
+    }
+    if (tripSit.links.pihkal) {
+      embedlinks += `, [PiHKAL Page](${tripSit.links.pihkal})`;
+    }
+    if (tripSit.links.tihkal) {
+      embedlinks += `, [TiHKAL Page](${tripSit.links.tihkal})`;
+    }
+    embed.addField('\u200B', '**Additional Links - ' + embedlinks + '**');
   }
   return embed;
 };
