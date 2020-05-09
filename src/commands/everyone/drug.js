@@ -226,11 +226,14 @@ module.exports = class drugCommand extends commando.Command {
       tripSit = result;
       return getPsychonautDrug(tripSit.pretty_name);
     }).then(function(result) {
-      deleteCommandMessages(msg);
-      return msg.embed(createDrugEmbed(tripSit, result));
-    }).catch((error) => {
-      console.log(error);
-      return msg.reply(error);
+      getTripSitDrug(args.drugName).then(function(tripresult) {
+        if (tripresult === 'Couldn\'t find any results. Is the drug name correct?') {
+          deleteCommandMessages(msg);
+          return msg.embed(createDrugEmbed(tripSit, result));
+        }
+        deleteCommandMessages(msg);
+        return msg.embed(createDrugEmbed(tripSit, result));
+      });
     });
   }
 };
