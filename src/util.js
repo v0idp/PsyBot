@@ -95,7 +95,7 @@ const getPsychonautDrug = function(drugName) {
         resolve(body.data.substances[0]);
       }
       else {
-        reject('Something went wrong with Psychonaut Wiki API');
+        resolve('Something went wrong with Psychonaut Wiki API');
       }
     });
   });
