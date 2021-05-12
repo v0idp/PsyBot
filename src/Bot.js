@@ -4,8 +4,7 @@ const path = require('path');
 const sqlite = require('sqlite');
 const fs = require('fs');
 
-const myIntents = new Intents(Intents.ALL);
-
+const myIntents = new Intents(Intents.NON_PRIVILEGED);
 class Bot extends Commando.Client {
   constructor(token, ownerid, commandprefix) {
     super({
