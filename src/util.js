@@ -10,8 +10,6 @@ const {JSDOM} = jsdom;
 
 const PSYCHONAUT_URL = 'https://api.psychonautwiki.org';
 const TRIPSIT_URL = 'http://tripbot.tripsit.me/api/tripsit/getDrug?name=';
-const STRAIN_URL = 'http://strainapi.evanbusse.com/';
-const STRAINAPI_KEY = config.api.strain;
 
 const escapeRegExp = function (string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
@@ -125,56 +123,6 @@ const getTripSitDrug = function(drugName) {
   });
 };
 
-const searchStrains = function(strainName) {
-  return new Promise(function (resolve, reject) {
-    request.get({
-      url: STRAIN_URL + STRAINAPI_KEY + '/strains/search/name/' + strainName,
-      timeout: 10000,
-      json: true
-    }, function (error, response, body) {
-      if (!response) {
-        reject('Strain API is currently down. Please try again later.');
-      }
-      else if (response && response.statusCode === 200 && body.length > 0){
-        resolve(body);
-      }
-      else {
-        reject('Couldn\'t find any results. Is the strain name correct?');
-      }
-    });
-  });
-};
-
-const getStrainFlavors = function(strainID) {
-  return new Promise(function (resolve, reject) {
-    request.get({
-      url: STRAIN_URL + STRAINAPI_KEY + '/strains/data/flavors/' + strainID
-    }, function (error, response, body) {
-      if (response.statusCode === 200){
-        resolve(JSON.parse(body));
-      }
-      else {
-        reject(error);
-      }
-    });
-  });
-};
-
-const getStrainEffects = function(strainID) {
-  return new Promise(function (resolve, reject) {
-    request.get({
-      url: STRAIN_URL + STRAINAPI_KEY + '/strains/data/effects/' + strainID
-    }, function (error, response, body) {
-      if (response.statusCode === 200){
-        resolve(JSON.parse(body));
-      }
-      else {
-        reject(error);
-      }
-    });
-  });
-};
-
 const getDrugsPill = function(imprint, color, shape) {
   return new Promise ((resolve, reject) => {
     let cachedDrugPath = path.join(__dirname, `cache/pills/${imprint}` + `_${color}` + `_${shape}.json`);
@@ -263,9 +211,6 @@ module.exports = {
   post,
   getPsychonautDrug,
   getTripSitDrug,
-  searchStrains,
-  getStrainFlavors,
-  getStrainEffects,
   isStaffMember,
   dateDifference,
   getDrugsPill,

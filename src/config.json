@@ -4,8 +4,5 @@
         "ownerID" : [""],
         "globalCommandPrefix" : "",
         "deleteCommandMessages" : false
-    },
-    "api" : {
-        "strain": ""
     }
 }
