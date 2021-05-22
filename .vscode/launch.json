@@ -11,7 +11,8 @@
       "program": "${workspaceFolder}\\src\\index.js",
       "env": {
         "CONFIG_NAME": "config.json"
-      }
+      },
+      "outputCapture": "std",
     },
     {
       "type": "node",
@@ -20,7 +21,8 @@
       "program": "${workspaceFolder}\\src\\index.js",
       "env": {
         "CONFIG_NAME": "dev-config.json"
-      }
+      },
+      "outputCapture": "std",
     }
   ]
 }

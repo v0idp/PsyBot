@@ -27,6 +27,10 @@ class Bot extends Commando.Client {
 			});
 		});
 
+    this
+     .on("debug", console.log)
+     .on("warn", console.log)
+
     // register default groups and commands
     this.registry
       .registerGroups([
