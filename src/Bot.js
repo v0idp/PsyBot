@@ -9,7 +9,7 @@ class Bot extends Commando.Client {
   constructor(token, ownerid, commandprefix) {
     super({
 			"owner": (ownerid) ? ownerid : null,
-			"commandPrefix": (commandprefix) ? commandprefix : '$',
+			"commandPrefix": (commandprefix) ? commandprefix : '-',
       "intents": myIntents
 		});
     this.token = token;
@@ -28,7 +28,6 @@ class Bot extends Commando.Client {
 		});
 
     this
-     .on("debug", console.log)
      .on("warn", console.log)
 
     // register default groups and commands

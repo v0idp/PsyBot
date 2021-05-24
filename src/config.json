@@ -2,7 +2,7 @@
     "general" : {
         "token" : "",
         "ownerID" : [""],
-        "globalCommandPrefix" : "",
+        "globalCommandPrefix" : "-",
         "deleteCommandMessages" : false
     }
 }

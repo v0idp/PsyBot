@@ -1,7 +1,7 @@
 {
   "name": "psybot",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "src/ShardingMgr.js",
   "keywords": [
     "discord",
     "bot",
@@ -19,7 +19,7 @@
   },
   "scripts": {
     "prestart": "npm install",
-    "start": "node src/index.js"
+    "start": "node src/ShardingMgr.js"
   },
   "author": "void*",
   "license": "GPLv3",

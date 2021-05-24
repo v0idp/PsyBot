@@ -18,4 +18,4 @@ COPY src $APP/src
 
 WORKDIR $APP
 
-CMD [ "pm2-runtime", "src/index.js" ]
+CMD [ "pm2-runtime", "src/ShardingMgr.js" ]
