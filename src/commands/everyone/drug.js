@@ -225,7 +225,11 @@ module.exports = class drugCommand extends commando.Command {
       return getPsychonautDrug(tripSit.pretty_name);
     }).then(function(result) {
       getTripSitDrug(args.drugName).then(function(tripresult) {
-        if (tripresult === 'Couldn\'t find any results. Is the drug name correct?') {
+        if (!tripSit.properties) {
+          deleteCommandMessages(msg);
+          return msg.reply('Couldn\'t find any results. Some property information is missing.');
+        }
+        else if (tripresult === 'Couldn\'t find any results. Is the drug name correct?') {
           deleteCommandMessages(msg);
           return msg.embed(createDrugEmbed(tripSit, result));
         }

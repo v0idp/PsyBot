@@ -38,7 +38,7 @@ module.exports = class tripCommand extends commando.Command {
 
   run (msg, args) {
     // Make sure we have the permissions to use this command
-    if (!msg.guild.me.hasPermission(['MANAGE_NICKNAMES', 'MANAGE_ROLES'])) {
+    if (!msg.guild.me.member.permissions.has(['MANAGE_NICKNAMES', 'MANAGE_ROLES'])) {
       deleteCommandMessages(msg);
       return msg.say(`I'm missing permissions to use this command. (manage nicknames, manage roles)`);
     }
