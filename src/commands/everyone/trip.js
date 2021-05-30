@@ -61,59 +61,63 @@ module.exports = class tripCommand extends commando.Command {
       args.dosage = parseFloat(args.drugName);
       args.drugName = 'LSD';
     }
-
-    if (!member.roles.cache.has(tripRole.id)) {
-      let prettyName;
-      getTripSitDrug(args.drugName).then(function(result){
-        prettyName = result.pretty_name;
-        if (prettyName === 'Cannabis') {
-          msg.reply('Please use the baked command for Cannabis next time');
-          return this.client.registry.commands.get('baked').run(msg, 'null');
-        }
-        else {
-          return getPsychonautDrug(result.pretty_name);
-        }
-      }).then(function(result) {
-        let unit = 'units';
-        if (result.roas && result.roas.length > 0) {
-          unit = result.roas[0].dose.units;
-        }
-
-        if (prettyName === 'Mushrooms') {
-          unit = 'g';
-        }
-
-        if (args.dosage !== 'null') {
-          member.setNickname(`${member.displayName} (${prettyName} ${args.dosage}${unit})`).then(m => m.roles.add(tripRole.id).catch((err) => {
-            console.error(err);
-            return msg.reply('I wasn\'t able to change your role. Your role might have higher permissions than me.');
-          })).catch((err) => {
-            console.error(err);
-            return msg.reply('I wasn\'t able to modify your name. Please shorten your nickname.');
-          });
-        }
-        else {
-          member.setNickname(`${member.displayName} (${prettyName})`).then(m => m.roles.add(tripRole.id).catch((err) => {
-            console.error(err);
-            return msg.reply('I wasn\'t able to change your role. Your role might have higher permissions than me.');
-          })).catch((err) => {
-            console.error(err);
-            return msg.reply('I wasn\'t able to modify your name. Please shorten your nickname.');
-          });
-        }
-
-        deleteCommandMessages(msg);
-        msg.say('Enjoy your trip!');
-      }).catch((error) => {
-        return msg.reply(error);
-      });
-    }
-    else {
-      member.setNickname(String(member.displayName + '').split(' (')[0]).then(m => {
-        m.roles.remove(tripRole.id).catch(console.log);
-        deleteCommandMessages(msg);
-        return msg.say('I hope you had fun!');
-      }).catch(console.error);
+    try {
+     if (!member.roles.cache.has(tripRole.id)) {
+     let prettyName;
+     getTripSitDrug(args.drugName).then(function(result){
+       prettyName = result.pretty_name;
+       if (prettyName === 'Cannabis') {
+         msg.reply('Please use the baked command for Cannabis next time');
+         return this.client.registry.commands.get('baked').run(msg, 'null');
+       }
+       else {
+         return getPsychonautDrug(result.pretty_name);
+       }
+     }).then(function(result) {
+       let unit = 'units';
+       if (result.roas && result.roas.length > 0) {
+         unit = result.roas[0].dose.units;
+       }
+      
+       if (prettyName === 'Mushrooms') {
+         unit = 'g';
+       }
+      
+       if (args.dosage !== 'null') {
+         member.setNickname(`${member.displayName} (${prettyName} ${args.dosage}${unit})`).then(m => m.roles.add(tripRole.id).catch((err) => {
+           console.error(err);
+           return msg.reply('I wasn\'t able to change your role. Your role might have higher permissions than me.');
+         })).catch((err) => {
+           console.error(err);
+           return msg.reply('I wasn\'t able to modify your name. Please shorten your nickname.');
+         });
+       }
+       else {
+         member.setNickname(`${member.displayName} (${prettyName})`).then(m => m.roles.add(tripRole.id).catch((err) => {
+           console.error(err);
+           return msg.reply('I wasn\'t able to change your role. Your role might have higher permissions than me.');
+         })).catch((err) => {
+           console.error(err);
+           return msg.reply('I wasn\'t able to modify your name. Please shorten your nickname.');
+         });
+       }
+      
+       deleteCommandMessages(msg);
+       msg.say('Enjoy your trip!');
+     }).catch((error) => {
+       return msg.reply(error);
+     });
+   }
+   else {
+     member.setNickname(String(member.displayName + '').split(' (')[0]).then(m => {
+       m.roles.remove(tripRole.id).catch(console.log);
+       deleteCommandMessages(msg);
+       return msg.say('I hope you had fun!');
+     }).catch(console.error);
+   }
+    } catch (error) {
+      console.log(error);
+      return msg.say('An unexpected error occurred. Please try again later.');
     }
   }
 };

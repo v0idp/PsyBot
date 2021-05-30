@@ -163,8 +163,11 @@ const getDrugsPill = function(imprint, color, shape) {
         imprint = imprint.toUpperCase();
 
         let colormatched = details.match(colorregex);
-        let color = colormatched[2];
-        color = color.replace('&amp;', '&');
+        let color = 'Null';
+        if (colormatched) {
+          color = colormatched[2];
+          color = color.replace('&amp;', '&');
+        }
 
         let shapematched = details.match(shaperegex);
         let shape = shapematched[2];
