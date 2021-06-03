@@ -108,7 +108,7 @@ const getTripSitDrug = function(drugName) {
     }, function(error, response, body) {
       if (error) {
         console.log(error);
-        reject('Problem communicating with the TripSit API');
+        resolve('Problem communicating with the TripSit API');
       }
       else if (response.statusCode !== 200 || body.err) {
         resolve('Couldn\'t find any results. Is the drug name correct?');

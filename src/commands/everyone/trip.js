@@ -65,6 +65,9 @@ module.exports = class tripCommand extends commando.Command {
      if (!member.roles.cache.has(tripRole.id)) {
      let prettyName;
      getTripSitDrug(args.drugName).then(function(result){
+      if (result === 'Problem communicating with the TripSit API') {
+        return msg.say('Problem communicating with the TripSit API');
+      }
        prettyName = result.pretty_name;
        if (prettyName === 'Cannabis') {
          msg.reply('Please use the baked command for Cannabis next time');

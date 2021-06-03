@@ -233,6 +233,10 @@ module.exports = class drugCommand extends commando.Command {
           deleteCommandMessages(msg);
           return msg.embed(createDrugEmbed(tripSit, result));
         }
+        else if (tripresult === 'Problem communicating with the TripSit API') {
+          deleteCommandMessages(msg);
+          return msg.say('Problem communicating with the TripSit API');
+        }
         deleteCommandMessages(msg);
         return msg.embed(createDrugEmbed(tripSit, result));
       });
